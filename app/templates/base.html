@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/simple-sidebar.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+
+	<title>{% block title %}{% endblock %} - YANBT</title>
+</head>
+
+<body>
+	<div class="d-flex" id="wrapper">
+		<!-- Sidebar -->
+		<div class="bg-light border-right" id="sidebar-wrapper">
+			<div class="sidebar-heading">Yet Another Network Backup Tool</div>
+			<div class="list-group list-group-flush w-100">
+				<a href="#" class="list-group-item list-group-item-action bg-light">Dashboard</a>
+				<a href="#" class="list-group-item list-group-item-action bg-light">Backup Jobs</a>
+				<a href="#" class="list-group-item list-group-item-action bg-light">Users</a>
+				<a href="#" class="list-group-item list-group-item-action bg-light">Devices</a>
+				<a href="#" class="list-group-item list-group-item-action bg-light">Settings</a>
+			</div>
+		</div>
+		<!-- /#sidebar-wrapper -->
+
+		{% for message in get_flashed_messages() %}
+		<div class="flash">{{ message }}</div>
+		{% endfor %}
+		
+		<!-- Page Content -->
+		<div id="page-content-wrapper">
+			<!-- Content Placeholder -->
+			<div class="container-fluid">{% block content %}{% endblock %}</div>
+		</div>
+	</div>
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	{% block scripts %}{% endblock %}
+</body>
+</html>
