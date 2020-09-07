@@ -20,11 +20,11 @@
 		<div class="bg-light border-right" id="sidebar-wrapper">
 			<div class="sidebar-heading">Yet Another Network Backup Tool</div>
 			<div class="list-group list-group-flush w-100">
-				<a href="#" class="list-group-item list-group-item-action bg-light">Dashboard</a>
-				<a href="#" class="list-group-item list-group-item-action bg-light">Backup Jobs</a>
-				<a href="#" class="list-group-item list-group-item-action bg-light">Users</a>
-				<a href="#" class="list-group-item list-group-item-action bg-light">Devices</a>
-				<a href="#" class="list-group-item list-group-item-action bg-light">Settings</a>
+				<a href="{{ url_for("dashboard.index") }}" class="list-group-item list-group-item-action bg-light">Dashboard</a>
+				<a href="{{ url_for("backup_jobs.index") }}" class="list-group-item list-group-item-action bg-light">Backup Jobs</a>
+				<a href="{{ url_for("users.index") }}" class="list-group-item list-group-item-action bg-light">Users</a>
+				<a href="{{ url_for("devices.index") }}" class="list-group-item list-group-item-action bg-light">Devices</a>
+				<a href="{{ url_for("settings.index") }}" class="list-group-item list-group-item-action bg-light">Settings</a>
 			</div>
 		</div>
 		<!-- /#sidebar-wrapper -->
