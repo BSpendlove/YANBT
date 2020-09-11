@@ -5,3 +5,7 @@ bp = Blueprint("devices", __name__, url_prefix="/devices")
 @bp.route("/", methods=["GET"])
 def index():
     return render_template("devices/index.html")
+
+@bp.route("/new_device", methods=["GET"])
+def new_device():
+    return render_template("devices/new_device.html")

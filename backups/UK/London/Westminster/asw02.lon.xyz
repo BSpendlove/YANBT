@@ -1,0 +1,148 @@
+!
+version 12.2
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname asw02.lon.xyz
+!
+boot-start-marker
+boot-end-marker
+!
+enable secret 5 $1$OPPH$WLpw9tDasvOp.O6ULAE/6.
+!
+username cisco secret 5 $1$zOBD$A9YF4Ul167GEkKdSQ.gg8/
+!
+aaa new-model
+!
+!
+aaa authentication login default local
+!
+!
+!
+aaa session-id common
+switch 1 provision ws-c3750g-24t
+system mtu routing 1500
+ip routing
+ip domain-name bspendlove.github.io
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+lldp run
+!
+ip ssh source-interface Vlan224
+ip ssh version 2
+!
+!
+interface Port-channel1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ spanning-tree portfast trunk
+!
+interface GigabitEthernet1/0/1
+ switchport access vlan 224
+ switchport mode access
+ switchport voice vlan 226
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/2
+ switchport access vlan 224
+ switchport mode access
+ switchport voice vlan 226
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/3
+ switchport access vlan 224
+ switchport mode access
+ switchport voice vlan 226
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/4
+ description Internet-Uplink
+ no switchport
+ ip address 192.0.2.1 255.255.255.252
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/5
+ switchport access vlan 200
+ switchport mode access
+ switchport voice vlan 210
+ shutdown
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/6
+ switchport access vlan 500
+ switchport mode access
+ switchport voice vlan 533
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/7
+ switchport access vlan 224
+ switchport mode access
+ switchport voice vlan 226
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/8
+ switchport access vlan 224
+ switchport mode access
+ switchport voice vlan 226
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/9
+ switchport access vlan 224
+ switchport mode access
+ switchport voice vlan 226
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/10
+ switchport access vlan 224
+ switchport mode access
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/11
+ switchport access vlan 224
+ switchport mode access
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/12
+ switchport access vlan 224
+ switchport mode access
+ spanning-tree portfast
+!
+interface Vlan224
+ ip address 192.168.0.252 255.255.255.0
+ ip ospf 10 area 0
+!
+router ospf 10
+ log-adjacency-changes
+ passive-interface default
+!
+ip classless
+ip route 0.0.0.0 0.0.0.0 10.198.100.1
+ip http server
+ip http secure-server
+!
+ip access-list standard MANAGEMENT_ACCESS
+ permit 10.198.100.1
+ permit 10.198.224.0 0.0.0.255
+ip access-list standard SNMP_RO_ACCESS
+ permit 192.168.0.65
+!
+ip sla enable reaction-alerts
+!
+!
+line con 0
+line vty 0 4
+ exec-timeout 0 0
+ transport input ssh
+ transport output ssh
+line vty 5 15
+ exec-timeout 0 0
+ transport input ssh
+ transport output ssh
+!
+netconf ssh acl 13
+end

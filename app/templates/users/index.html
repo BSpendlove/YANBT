@@ -1,7 +1,40 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="p-5">
-    <h1>Users</h1>
+<h1>Users</h1>
+<div class="row m-3">
+    <div class="card col-12">
+        <div class="p-3">
+            <table class="table table-striped" id="usersTable">
+                <thead>
+                    <th>#</th>
+                    <th>Username</th>
+                    <th>Password</th>
+                    <th>Total Devices</th>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <div class="float-right">
+                <form>
+                    <div class="row">
+                        <div class="form-group p-3">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" id="username" placeholder="Enter Username">
+                        </div>
+                        <div class="form-group p-3">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" placeholder="Enter Password">
+                        </div>
+                    </div>
+                    <input id="addUserBtn" class="btn btn-primary" type="submit" value="Add User">
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/users/users_generic.js') }}"></script>
 {% endblock %}

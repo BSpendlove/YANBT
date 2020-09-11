@@ -1,25 +1,48 @@
 {% extends 'base.html' %}
 
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-treeview.css') }}">
+{% endblock %}
+
 {% block content %}
-<div class="p-5">
-    <h1>Dashboard</h1>
-    <div class="row">
-	<div class="card col-12 p-4">
-	<div class="row">
-        <div class="col-md-4 text-center">
-            <h5>Current Users</h5>
-            <div class="numberCircle">2</div>
+<h1>Dashboard</h1>
+<div class="row">
+    <div class="card col-12 p-4 mb-5">
+        <div class="row">
+            <div class="col-md-4 text-center">
+                <h5>Current Users</h5>
+                <div class="numberCircle">{{ stats.total_users }}</div>
+            </div>
+            <div class="col-md-4 text-center">
+                <h5>Current Devices</h5>
+                <div class="numberCircle">{{ stats.total_devices }}</div>
+            </div>
+            <div class="col-md-4 text-center">
+                <h5>Active Jobs</h5>
+                <div class="numberCircle">{{ stats.total_jobs }}</div>
+            </div>
         </div>
-	<div class="col-md-4 text-center">
-            <h5>Current Devices</h5>
-            <div class="numberCircle">15</div>
-        </div>
-	<div class="col-md-4 text-center">
-            <h5>Active Jobs</h5>
-            <div class="numberCircle">9</div>
-        </div>
-	</div>
-	</div>
     </div>
 </div>
+<div class="row">
+    <div class="container col-3">
+        <h3>Backup Explorer</h3>
+        <div class="card p-4 mb-5 mr-auto">
+            <div id="tree"></div>
+        </div>
+    </div>
+        <div class="container-fluid col-9">
+        <h3>Config Viewer</h3>
+        <div class="card">
+            <pre class="bg-light m-1" style="height:1200px;" id="configViewer">
+            </pre>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap-treeview.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/dashboard/dashboard_generic.js') }}"></script>
 {% endblock %}

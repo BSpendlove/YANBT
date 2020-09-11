@@ -1,7 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="p-5">
-    <h1>Settings</h1>
+<h1>Settings</h1>
+<div class="row m-3">
+    <div class="card col-12">
+        <div class="p-3">
+            <form>
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label for="backupRootDir">Backup Root Directory</label>
+                        <input type="text" class="form-control" id="backupRootDir" placeholder="Eg. backups">
+                    </div>
+                </div>
+                <button id="editSettingsBtn" class="btn btn-primary"><i class="fas fa-lock p-1"></i>Edit</button>
+                <button id="saveSettingsBtn" class="btn btn-primary"><i></i>Save</button>
+            </form>
+        </div>
+    </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/settings/settings_generic.js') }}"></script>
 {% endblock %}
