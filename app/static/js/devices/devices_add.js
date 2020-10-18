@@ -1,6 +1,7 @@
 $devices_add = (function() {
     var netmikodriver = $('#netmikodriver');
     var users = $('#users');
+    var groups = $('#groups');
 
     var addDeviceBtn = $('#addDeviceBtn');
 
@@ -22,6 +23,17 @@ $devices_add = (function() {
             var users_data = data.data;
             $.each(users_data, function(index, item){
                 users.append($("<option />").val(item.id).text(item.username));
+            });
+        });
+    }
+
+    function populateGroupSelection(){
+        $.ajax({
+            url: "http://localhost:5006/api/v1/groups/"
+        }).done(function (data){
+            var groups_data = data.data;
+            $.each(groups_data, function(index, item){
+                groups.append($("<option />").val(item.id).text(item.folder_path));
             });
         });
     }
@@ -53,7 +65,7 @@ $devices_add = (function() {
             "authentication_user": +$('#users').val(),
             "config_command": $('#configcommand').val(),
             "pre_commands": $('#precommands').val(),
-            "assigned_group": null,
+            "assigned_group": $('#groups').val(),
             "description": null,
             "notes": null
         }
@@ -75,6 +87,7 @@ $devices_add = (function() {
 
     populateNetmikoDriversSelection();
     populateUserSelection();
+    populateGroupSelection();
 
     addDeviceBtn.on("click", function(e){
         e.preventDefault();

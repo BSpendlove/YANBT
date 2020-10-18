@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>New Backup Job</h1>
+<div class="row m-3">
+    <div class="card col-12">
+        <div class="p-3">
+            <form>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label for="name">Name*</label>
+                        <input type="text" class="form-control" id="name" placeholder="Enter job name">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label for="description">Description</label>
+                        <input type="text" class="form-control" id="description" placeholder="eg. Firewall HA Backup">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-2">
+                        <label for="groups">Group*</label>
+                        <select class="form-control" id="groups">
+                            <option />
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="enabled">
+                            <label class="form-check-label" for="enabled">Enable Job</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label for="occur">Occur</label>
+                        <input type="text" class="form-control" id="occur" placeholder="eg. 1,1,1,1,1,0,0">
+                        <small id="occurHelp" class="form-text text-muted">Mon,Tue,Wed,Thu,Fri,Sat,Sun - Use 0 to skip or 1 to backup. For example, backups only on Monday and Fridays will be: 1,0,0,0,1,0,0</small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label for="backupTime">Backup Time</label>
+                        <input type="text" class="form-control" id="backupTime" placeholder="eg. 10:45">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <h5>Debug Output</h5>
+    <pre class="bg-light p-3" id="debugOutput">
+    </pre>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/backup_jobs/new_job.js') }}"></script>
+{% endblock %}

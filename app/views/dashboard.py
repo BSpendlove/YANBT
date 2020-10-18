@@ -7,7 +7,3 @@ bp = Blueprint("dashboard", __name__)
 def index():
     stats = database_functions.total_stats()
     return render_template("dashboard/index.html", stats=stats)
-
-@bp.route("/test", methods=["GET"])
-def test():
-    return render_template("tests/bootstrap_learning.html")

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-treeview.css') }}">
+{% endblock %}
+
+{% block content %}
+<h1>Groups</h1>
+<div class="row">
+    <div class="col-5">
+        <div class="card p-4 mb-5 h-100">
+            <h5>Explorer</h5>
+            <div id="groups_tree"></div>
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="card p-4 mb-5">
+            <h5>Create Folder</h5>
+            <form>
+                <div class="row">
+                    <div class="form-group p-3">
+                        <label for="folder_name">Folder</label>
+                        <input type="text" class="form-control" id="folder_name" disabled>
+                    </div>
+                    <div class="form-group p-3">
+                        <label for="folder_parent">Parent Folder</label>
+                        <input type="text" class="form-control" id="folder_parent" disabled>
+                    </div>
+                </div>
+                <div class="float-right">
+                    <input id="addFolderBtn" class="btn btn-primary" type="submit" value="Create" disabled>
+                    <input id="deleteFolderBtn" class="btn btn-danger" type="submit" value="Delete" disabled>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="card p-4 mb-5">
+            <h5>Devices</h5>
+            <table class="table table-striped" id="groupMemberTable">
+                <thead>
+                    <th>Members</th>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <form>
+                <input id="addDeviceBtn" class="btn btn-primary" type="submit" value="Add Device" disabled>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap-treeview.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/groups/groups_generic.js') }}"></script>
+{% endblock %}

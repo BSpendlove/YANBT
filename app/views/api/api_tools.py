@@ -1,4 +1,5 @@
 from flask import Blueprint, request
+from app import Config
 from app.utilities import generic_responses, helpers
 from app.utilities.netmiko_functions import get_netmiko_drivers
 from app.models import ApiConfig
@@ -12,11 +13,35 @@ def netmiko_drivers():
 
 @bp.route("/directory_tree", methods=["GET"])
 def directory_tree():
-    tree = helpers.dir_to_list("backups")
-    if not tree:
-        return generic_responses.message_response("No entries in tree")
+    tree = helpers.dir_to_list(Config().load_local_config()["backup_directory"])
 
-    return generic_responses.data_response(tree)
+    root_path = ApiConfig.query.get(1).backup_directory
+
+    root_tree = [{
+        "icon": "fa fa-folder",
+        "nodes": tree,
+        "path": "",
+        "text": root_path,
+        "type": "folder"
+    }]
+
+    return generic_responses.data_response(root_tree)
+
+@bp.route("/database_group_tree", methods=["GET"])
+def database_group_tree():
+    tree = helpers.dir_to_list_no_files(Config().load_local_config()["backup_directory"])
+
+    root_path = ApiConfig.query.get(1).backup_directory
+
+    root_tree = [{
+        "icon": "fa fa-folder",
+        "nodes": tree,
+        "path": "",
+        "text": root_path,
+        "type": "folder"
+    }]
+
+    return generic_responses.data_response(root_tree)
 
 @bp.route("/get_config_file", methods=["POST"])
 def get_config_file():

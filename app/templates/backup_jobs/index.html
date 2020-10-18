@@ -2,4 +2,26 @@
 
 {% block content %}
 <h1>Backup Jobs</h1>
+<div class="row m-3">
+    <div class="card col-12">
+        <div class="p-3">
+            <table class="table table-striped" id="backupJobsTable">
+                <thead>
+                    <th>Job ID</th>
+                    <th>Name</th>
+                    <th>Assigned Group</th>
+                    <th>Active</th>
+                    <th>Start Date/Time</th>
+                    <th>End Date/Time</th>
+                    <th></th>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-12 mt-3">
+        <a class="btn btn-primary btn-sm float-right" href="{{ url_for('backup_jobs.new_job') }}" role="button">Create Job</a>
+    </div>
+</div>
 {% endblock %}

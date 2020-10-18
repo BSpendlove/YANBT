@@ -1,5 +1,6 @@
 $settings = (function() {
     var backupRootDir = $('#backupRootDir');
+    var additionalSettingsDiv = $('#additionalSettings');
     var editSettingsBtn = $('#editSettingsBtn');
     var saveSettingsBtn = $('#saveSettingsBtn');
 
@@ -25,6 +26,27 @@ $settings = (function() {
         }).done(function (data){
             console.log(data);
             backupRootDir.val(data.data.backup_directory);
+            additionalSettingsDiv.html('<p>App Version: ' + data.data.version + '</p>');
+        });
+    }
+
+    function updateAppConfig(){
+        var backup_dir = backupRootDir.val();
+        if (backup_dir == null || backup_dir == "")
+        {
+            alert("Backup Directory field must not be empty...");
+            return;
+        }
+        $.ajax({
+            url: "http://localhost:5006/api/v1/config/",
+            type: "PATCH",
+            contentType: "application/json",
+            data: JSON.stringify({
+                "backup_directory": backup_dir
+            })
+        }).done(function (data){
+            console.log(data);
+            alert("Backup Directory has been updated...");
         });
     }
 
@@ -41,6 +63,7 @@ $settings = (function() {
 
     saveSettingsBtn.on("click", function(e){
         e.preventDefault();
+        updateAppConfig();
     });
 
     getAppConfig();

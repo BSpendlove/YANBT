@@ -21,6 +21,7 @@ $devices = (function() {
                     table_data += '<td>'+device.port+'</td>';
                     table_data += '<td>'+device.netmiko_driver+'</td>';
                     table_data += '<td>'+device.authentication_user+'</td>';
+                    table_data += '<td>'+device.assigned_group+'</td>';
                     table_data += '</tr>';
                 });
 

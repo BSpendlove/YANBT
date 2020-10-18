@@ -1,17 +1,14 @@
 from flask import Blueprint, request
-from app.utilities import generic_responses, helpers
-from app.models import ApiConfig
+from app.utilities import generic_responses, helpers, validators
+from app import Config
 from app import db
 
 bp = Blueprint("api_config", __name__, url_prefix="/api/v1/config")
 
 @bp.route("/", methods=["GET"])
 def api_config():
-    app_api_config = ApiConfig.query.get(1)
-    if not app_api_config:
-        return generic_responses.message_response("No API Config found.")
-
-    return generic_responses.data_response(app_api_config.as_dict())
+    app_config = Config().load_local_config()
+    return generic_responses.data_response(app_config)
 
 @bp.route("/", methods=["PATCH"])
 def api_config_save():
@@ -19,20 +16,14 @@ def api_config_save():
         return generic_responses.bad_json_response()
 
     post_data = request.get_json()
-    app_api_config = ApiConfig.query.get(1)
+    validation, field = validators.valdiate_required_fields(["backup_directory"], post_data)
+    if not validation:
+        return generic_responses.missing_field_response(field)
 
-    if not app_api_config:
-        config_obj = ApiConfig(**post_data)
-        db.session.add(config_obj)
-        db.session.commit()
-        return generic_responses.data_response(config_obj.as_dict())
+    app_settings = Config()
+    app_settings.load_local_config() # Load current config which will store as DEFAULT_APP_CONFIG which we can then access, set and then call write_config() which will use DEFAULT_APP_CONFIG
+    for k,v in post_data.items():
+        if k in app_settings.DEFAULT_APP_CONFIG.keys():
+            app_settings.DEFAULT_APP_CONFIG[k] = v
 
-    try:
-        for key,value in post_data.items():
-            setattr(app_api_config, key, value)
-    except Exception as error:
-        return generic_responses.error_response(error)
-
-    db.session.commit()
-    return generic_responses.data_response(app_api_config.as_dict())
-    
+    return generic_responses.data_response(app_settings.write_config())

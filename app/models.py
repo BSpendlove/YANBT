@@ -1,10 +1,14 @@
 from app import db
+from datetime import datetime
 
 class ApiConfig(db.Model):
     __tablename__ = "apiconfig"
 
     id = db.Column(db.Integer, primary_key=True)
-    backup_directory = db.Column(db.String(), unique=True)
+    backup_directory = db.Column(db.String(), nullable=False, unique=True)
+
+    def __repr__(self):
+        return "<YANBT ApiConfig {}>".format(self.id)
 
     def as_dict(self):
         return {
@@ -24,7 +28,7 @@ class User(db.Model):
         self.password = password
 
     def __repr__(self):
-        return "<User {}>".format(self.username)
+        return "<YANBT User {}>".format(self.username)
 
     def as_dict(self, show_password=True):
         return {
@@ -39,21 +43,20 @@ class Device(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     friendly_name = db.Column(db.String)
-    ip = db.Column(db.String)
+    ip = db.Column(db.String, nullable=False)
     port = db.Column(db.Integer)
-    netmiko_driver = db.Column(db.String)
+    netmiko_driver = db.Column(db.String, nullable=False)
     authentication_user = db.Column(db.Integer, db.ForeignKey("user.id"))
     config_command = db.Column(db.String)
     pre_commands = db.Column(db.String)
-    assigned_group = db.relationship("Group", backref="group", lazy='dynamic')
+    assigned_group = db.Column(db.Integer, db.ForeignKey("group.id"))
     description = db.Column(db.String)
     notes = db.Column(db.String)
 
     def __repr__(self):
-        return "<Device {}>".format(self.id)
+        return "<YANBT Device {}>".format(self.id)
 
     def as_dict(self):
-        print(self.authentication_user)
         return {
             "id": self.id,
             "friendly_name": self.friendly_name,
@@ -63,6 +66,7 @@ class Device(db.Model):
             "authentication_user": self.authentication_user,
             "config_command": self.config_command,
             "pre_commands": self.pre_commands,
+            "assigned_group": Group.query.get(self.assigned_group).folder_path if self.assigned_group else None,
             "description": self.description,
             "notes": self.notes
         }
@@ -79,20 +83,56 @@ class Group(db.Model):
     __tablename__ = "group"
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
+    name = db.Column(db.String, nullable=False)
+    folder_path = db.Column(db.String, nullable=False, unique=True)
+    is_root = db.Column(db.Boolean)
+    is_child = db.Column(db.Boolean)
+    child_root = db.Column(db.Integer)
     description = db.Column(db.String)
-    devices = db.Column(db.Integer, db.ForeignKey("device.id"))
-
-    def __init__(self, name):
-        self.name = name
+    devices = db.relationship("Device", backref="device", lazy='dynamic')
+    backup_job = db.relationship("BackupJob", backref="backupjob", lazy='dynamic')
 
     def __repr__(self):
-        return "<Group {}>".format(self.name)
+        return "<YANBT Group {}>".format(self.name)
 
     def as_dict(self):
         return {
             "id": self.id,
             "name": self.name,
+            "folder_path": self.folder_path,
             "description": self.description,
-            "devices": [_device.as_dict_basic for _device in self.devices]
+            "devices": [_device.as_dict_basic() for _device in self.devices] if self.devices else []
         }
+
+class BackupJob(db.Model):
+    __tablename__ = "backupjob"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    description = db.Column(db.String)
+    assigned_group = db.Column(db.Integer, db.ForeignKey("group.id"))
+    active = db.Column(db.Boolean)
+    start_date_time = db.Column(db.String)
+    end_date_time = db.Column(db.String)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    job_occur = db.Column(db.String)
+    job_start_time = db.Column(db.String)
+
+    def __repr__(self):
+        return "<YANBT BackupJob {}>".format(self.id)
+
+    def as_dict():
+        return {
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "assigned_group": Group.query.get(self.assigned_group).folder_path if self.assigned_group else None,
+            "active": self.active,
+            "start_date_time": self.start_date_time,
+            "end_date_time": self.end_date_time,
+            "created_at": self.created_at,
+            "job_occur": self.job_occur,
+            "job_start_time": self.job_start_time
+        }
+
+    

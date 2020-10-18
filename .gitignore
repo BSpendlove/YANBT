@@ -130,3 +130,10 @@ dmypy.json
 
 #vs-code
 .vscode/
+
+#app-related
+backups/
+backups_for_testing/
+app_settings.json
+app.db
+*.db
