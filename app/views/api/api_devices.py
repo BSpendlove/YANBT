@@ -19,7 +19,7 @@ def create_device():
     validation, field = validators.valdiate_required_fields(["friendly_name", "ip", "netmiko_driver", "authentication_user"], post_data)
     if not validation:
         return generic_responses.missing_field_response(field)
-
+    print(post_data)
     try:
         device = Device(**post_data)
     except Exception as error:

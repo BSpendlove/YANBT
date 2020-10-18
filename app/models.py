@@ -49,7 +49,7 @@ class Device(db.Model):
     authentication_user = db.Column(db.Integer, db.ForeignKey("user.id"))
     config_command = db.Column(db.String)
     pre_commands = db.Column(db.String)
-    assigned_group = db.Column(db.Integer, db.ForeignKey("group.id"))
+    assigned_group = db.Column(db.String, db.ForeignKey("group.folder_path"))
     description = db.Column(db.String)
     notes = db.Column(db.String)
 
@@ -66,7 +66,7 @@ class Device(db.Model):
             "authentication_user": self.authentication_user,
             "config_command": self.config_command,
             "pre_commands": self.pre_commands,
-            "assigned_group": Group.query.get(self.assigned_group).folder_path if self.assigned_group else None,
+            "assigned_group": Group.query.get(self.assigned_group).folder_path if Group.query.get(self.assigned_group) else None,
             "description": self.description,
             "notes": self.notes
         }
@@ -82,9 +82,8 @@ class Device(db.Model):
 class Group(db.Model):
     __tablename__ = "group"
 
-    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
-    folder_path = db.Column(db.String, nullable=False, unique=True)
+    folder_path = db.Column(db.String, nullable=False, primary_key=True)
     is_root = db.Column(db.Boolean)
     is_child = db.Column(db.Boolean)
     child_root = db.Column(db.Integer)
@@ -97,7 +96,6 @@ class Group(db.Model):
 
     def as_dict(self):
         return {
-            "id": self.id,
             "name": self.name,
             "folder_path": self.folder_path,
             "description": self.description,
@@ -110,7 +108,7 @@ class BackupJob(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     description = db.Column(db.String)
-    assigned_group = db.Column(db.Integer, db.ForeignKey("group.id"))
+    assigned_group = db.Column(db.Integer, db.ForeignKey("group.folder_path"))
     active = db.Column(db.Boolean)
     start_date_time = db.Column(db.String)
     end_date_time = db.Column(db.String)

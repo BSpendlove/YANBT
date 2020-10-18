@@ -41,7 +41,7 @@ def dir_to_list_no_files(dirname, path=os.path.pathsep):
     return data
 
 def sync_database_folder_structure():
-    base_directory = Config.load_local_config()["backup_directory"]
+    base_directory = Config().load_local_config()["backup_directory"]
     groups = Group.query.all()
 
     for group in groups:
@@ -50,7 +50,7 @@ def sync_database_folder_structure():
             os.mkdir(folder_dir)
 
 def delete_folder(folder_path):
-    base_directory = Config.load_local_config()["backup_directory"]
+    base_directory = Config().load_local_config()["backup_directory"]
     folder_dir = "{}{}".format(base_directory, folder_path.replace(";", "/"))
     path = pathlib.Path(folder_dir)
     path.rmdir()

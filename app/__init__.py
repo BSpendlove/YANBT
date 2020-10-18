@@ -36,6 +36,9 @@ with app.app_context():
     except:
         print("Error trying to load local config...")
 
+    #Sync database groups with folders
+    api_tools.database_sync()
+
 app.register_blueprint(backup_jobs.bp)
 app.register_blueprint(dashboard.bp)
 app.register_blueprint(devices.bp)

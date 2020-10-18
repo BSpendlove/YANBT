@@ -13,13 +13,11 @@ def netmiko_drivers():
 
 @bp.route("/directory_tree", methods=["GET"])
 def directory_tree():
-    tree = helpers.dir_to_list(Config().load_local_config()["backup_directory"])
-
-    root_path = ApiConfig.query.get(1).backup_directory
+    root_path = helpers.dir_to_list(Config().load_local_config()["backup_directory"])
 
     root_tree = [{
         "icon": "fa fa-folder",
-        "nodes": tree,
+        "nodes": root_path,
         "path": "",
         "text": root_path,
         "type": "folder"
@@ -29,19 +27,21 @@ def directory_tree():
 
 @bp.route("/database_group_tree", methods=["GET"])
 def database_group_tree():
-    tree = helpers.dir_to_list_no_files(Config().load_local_config()["backup_directory"])
-
-    root_path = ApiConfig.query.get(1).backup_directory
+    root_path = helpers.dir_to_list_no_files(Config().load_local_config()["backup_directory"])
 
     root_tree = [{
         "icon": "fa fa-folder",
-        "nodes": tree,
+        "nodes": root_path,
         "path": "",
         "text": root_path,
         "type": "folder"
     }]
 
     return generic_responses.data_response(root_tree)
+
+@bp.route("/sync_database", methods=["GET"])
+def database_sync():
+    helpers.sync_database_folder_structure()
 
 @bp.route("/get_config_file", methods=["POST"])
 def get_config_file():
@@ -53,16 +53,16 @@ def get_config_file():
     if not "path" in post_data:
         return generic_responses.missing_field_response("path")
 
-    app_api_config = ApiConfig.query.get(1)
+    app_api_config = Config().load_local_config()
     if not app_api_config:
         return generic_responses.message_response("No API Config found.")
 
-    if not app_api_config.backup_directory:
+    if not app_api_config["backup_directory"]:
         return generic_responses.message_response("No backup_directory set within ApiConfig.")
 
     path = post_data["path"]
     child_path = "/".join(path.split(";"))
-    full_path = "{}{}".format(app_api_config.backup_directory, child_path)
+    full_path = "{}{}".format(app_api_config["backup_directory"], child_path)
 
     with open(full_path, "r") as config_file:
         config = config_file.read()

@@ -33,7 +33,7 @@ $devices_add = (function() {
         }).done(function (data){
             var groups_data = data.data;
             $.each(groups_data, function(index, item){
-                groups.append($("<option />").val(item.id).text(item.folder_path));
+                groups.append($("<option />").val(item.folder_path).text(item.folder_path));
             });
         });
     }
